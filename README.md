@@ -1,6 +1,6 @@
 # Growbox
 This script is for a system that monitors water level, temperature, and humidity and controls water circulation and UV lights in a deep water hydroponic system
-Type the following lines into terminal on your raspberry pi: 
+In addition to downloading the two scripts, be sure to type the following lines into terminal on your raspberry pi: 
 sudo apt-get update
 sudo pip3 install adafruit-circuitpython-mcp3xxx
 sudo pip3 install adafruit-blinka
