@@ -16,8 +16,10 @@ mylcd = I2C_LCD_driver.lcd()
 GPIO.setmode(GPIO.BCM)
 relay1 = 17
 relay2 = 27
-GPIO.setup(relay1, GPIO.OUT)
-GPIO.setup(relay2, GPIO.OUT)
+relay3 = 22
+GPIO.setup(relay1, GPIO.OUT)#Lights relay
+GPIO.setup(relay2, GPIO.OUT)#Pump relay 
+GPIO.setup(relay3, GPIO.OUT)#system relay
 
 #RGB LED Setup
 Red = 14
@@ -35,7 +37,8 @@ chan0 = AnalogIn(mcp, MCP.P0)
 #define digital sensor being used
 sensor=Adafruit_DHT.DHT11
 
-
+time.sleep(5)
+GPIO.output(relay3, GPIO.LOW)
 while True:
     try:
         now = datetime.now()
@@ -43,7 +46,7 @@ while True:
         minute = (int(now.strftime('%M')))
         #define window for light on/off
         start_time = 900
-        end_time = 2033
+        end_time = 2130
         #turn light on or off
         if current_time > start_time and current_time<end_time:
             GPIO.output(relay1, GPIO.LOW)
@@ -61,12 +64,12 @@ while True:
         R=chan0.value
     #react to changes in water level
         if R<2000:
-            Level = 'LOW'
+            Level = 'LOW   '
             GPIO.output(Red, GPIO.HIGH)
             GPIO.output(Green, GPIO.LOW)
         #add refill pump here
         if R>50000:
-            Level = 'HIGH'
+            Level = 'HIGH  '
             GPIO.output(Red, GPIO.LOW)
             GPIO.output(Green, GPIO.HIGH)
         if R>2000 and R<50000:
@@ -79,20 +82,7 @@ while True:
 
         mylcd.lcd_display_string(lcd_line_1,1)
         mylcd.lcd_display_string(lcd_line_2,2)
-    #print("Temp (F)=",temperature,"Humidity=", humidity,"Water LeveL=", Level, "Time=", current_time, "Water Level: ", Level)
-    #print(R)
-    #temp = current_time + " "+ str(temperature) +  "\n" 
-    #f = open("temp.txt","a")
-    #f.write(temp)
-    #f.close()
-    #hum = current_time + " " + str(humidity) + "\n" 
-    #f = open("hum.txt","a")
-#     f.write(hum)
-#     f.close()
-    #lev = current_time + " " + str(Level) + "\n" 
-    #f = open("lev.txt","a")
-    #f.write(lev)
-    #f.close()
+
     except RuntimeError as error:
         print(error.args[0])
         time.sleep(2)
